@@ -202,6 +202,58 @@
     font-size: 40px;
   }
 
+  /* TEST DE MALINAS */
+  .malinas-intro {
+    background: var(--panel-inner); border-left: 4px solid var(--accent);
+    border-radius: 6px; padding: 12px 14px; margin-bottom: 16px;
+    font-size: 13px; line-height: 1.5;
+  }
+  .malinas-intro ul { margin: 8px 0 0 18px; }
+  .malinas-q {
+    background: var(--panel); border: 2px solid var(--border);
+    border-radius: 8px; padding: 12px; margin-bottom: 12px;
+  }
+  .malinas-q-title { font-weight: bold; font-style: italic; margin-bottom: 8px; font-size: 14px; }
+  .malinas-opt {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 12px; border-radius: 6px; border: 2px solid var(--border);
+    margin-bottom: 8px; cursor: pointer; background: var(--panel-inner);
+  }
+  .malinas-opt.selected { border-color: #ffd23f; background: rgba(255,255,255,0.15); }
+  .malinas-opt:last-child { margin-bottom: 0; }
+  .malinas-opt-label { flex: 1; padding-right: 8px; font-size: 13px; }
+  .malinas-opt-pts { font-size: 11px; font-weight: bold; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 10px; flex-shrink: 0; }
+  .malinas-actions { display: flex; gap: 10px; margin: 16px 0; }
+  .malinas-btn-primary {
+    flex: 1; background: var(--accent); color: white; border: none;
+    border-radius: 8px; padding: 14px; font-size: 15px; font-weight: bold;
+    font-style: italic; cursor: pointer;
+  }
+  .malinas-btn-primary:disabled { opacity: 0.4; }
+  .malinas-btn-secondary {
+    background: var(--panel); color: white; border: 2px solid var(--border);
+    border-radius: 8px; padding: 14px 18px; font-size: 14px; font-weight: bold; cursor: pointer;
+  }
+  .malinas-result { border-radius: 8px; padding: 16px; margin-bottom: 16px; border: 3px solid; }
+  .malinas-result.verde { border-color: #3ddc84; background: rgba(61,220,132,0.12); }
+  .malinas-result.amarillo { border-color: #ffd23f; background: rgba(255,210,63,0.12); }
+  .malinas-result.rojo { border-color: #ff5c5c; background: rgba(255,92,92,0.15); }
+  .malinas-result-total { font-size: 14px; opacity: 0.9; }
+  .malinas-result-title { font-size: 18px; font-weight: 900; font-style: italic; margin: 2px 0 8px; }
+  .malinas-result-time { font-size: 13px; margin-bottom: 10px; }
+  .malinas-result-action { font-size: 15px; font-weight: bold; margin: 10px 0 6px; }
+  .malinas-result ul { margin: 0 0 0 18px; font-size: 13px; line-height: 1.6; }
+  .malinas-phones { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
+  .malinas-phone-card { background: var(--panel-inner); border-radius: 8px; padding: 10px 4px; text-align: center; text-decoration: none; display: block; }
+  .malinas-phone-territorio { font-size: 10px; opacity: 0.85; color: #fff; }
+  .malinas-phone-num { font-size: 13px; font-weight: 900; color: #fff; margin-top: 2px; }
+  .malinas-table-wrap { background: var(--panel); border: 2px solid var(--border); border-radius: 8px; padding: 12px; margin-top: 8px; overflow-x: auto; }
+  .malinas-table-title { font-weight: bold; font-style: italic; margin-bottom: 8px; font-size: 14px; }
+  .malinas-table { width: 100%; border-collapse: collapse; font-size: 10.5px; }
+  .malinas-table th, .malinas-table td { border: 1px solid var(--border); padding: 6px 3px; text-align: center; }
+  .malinas-table th { background: var(--panel-inner); }
+  .malinas-footer { text-align: center; font-size: 11px; opacity: 0.7; margin-top: 16px; line-height: 1.5; }
+
   /* PANEL */
   .panel {
     background: var(--panel);
@@ -575,16 +627,196 @@
 <div id="screen-embarazadas" class="screen">
   <div class="topbar">
     <button class="back-btn" onclick="goBack()">←</button>
-    Embarazadas
+    Test de Malinas
     <button class="back-btn" onclick="goTo('screen-intro')" style="margin-left:auto;background:#3344ff;border-radius:4px;width:32px;height:32px;font-size:16px;">🏠</button>
   </div>
-  <div style="text-align:center; padding:4px 0;">
-    <a href="https://claude.ai/public/artifacts/a903fdc4-6e54-4b90-b1b1-22a81ca38c24" target="_blank" style="color:#fff; font-size:11px; opacity:0.7;">¿No carga? Abrir en pestaña nueva ↗</a>
+  <div style="padding:16px;">
+    <div class="malinas-intro">
+      <strong>Valoración de parto inminente en emergencias</strong>
+      <ul>
+        <li>La presencia de <strong>pujos espontáneos</strong> indica parto inminente independientemente de la puntuación</li>
+        <li>Ten en cuenta el <strong>tiempo de traslado</strong> al hospital en la decisión</li>
+        <li>Si no estás familiarizado con la exploración vaginal, NO la realices</li>
+      </ul>
+    </div>
+
+    <div id="malinas-questions"></div>
+
+    <div class="malinas-actions">
+      <button id="malinas-calc-btn" class="malinas-btn-primary" onclick="calcularMalinas()" disabled>Calcular e interpretar</button>
+      <button class="malinas-btn-secondary" onclick="reiniciarMalinas()">Reiniciar</button>
+    </div>
+
+    <div id="malinas-result"></div>
+
+    <div class="malinas-table-wrap">
+      <div class="malinas-table-title">Tabla de referencia</div>
+      <table class="malinas-table">
+        <thead>
+          <tr><th>Parámetro</th><th>0 pts</th><th>1 pto</th><th>2 pts</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Paridad</td><td>Primípara</td><td>Secundípara</td><td>Multípara</td></tr>
+          <tr><td>Duración parto</td><td>&lt;3h</td><td>3-5h</td><td>&gt;6h</td></tr>
+          <tr><td>Duración contracción</td><td>&lt;1min</td><td>1min</td><td>&gt;1min</td></tr>
+          <tr><td>Intervalo contracciones</td><td>&gt;5min</td><td>3-5min</td><td>&lt;3min</td></tr>
+          <tr><td>Rotura de bolsa</td><td>No</td><td>Inmediata</td><td>&gt;1h</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="malinas-footer">
+      Basado en el protocolo de Osakidetza – Atención al parto de emergencia fuera de las áreas de parto.<br>
+      Herramienta de apoyo a la decisión clínica. No sustituye el juicio clínico profesional.
+    </div>
   </div>
-  <iframe src="https://claude.ai/public/artifacts/a903fdc4-6e54-4b90-b1b1-22a81ca38c24"
-          style="width:100%; height:calc(100vh - 90px); height:calc(100dvh - 90px); border:none; display:block;"
-          loading="lazy"></iframe>
 </div>
+
+<script>
+  const malinasQuestions = {
+    paridad: {
+      title: "Paridad",
+      options: [
+        { value: 0, label: "Primípara (primer parto)" },
+        { value: 1, label: "Secundípara (segundo parto)" },
+        { value: 2, label: "Multípara (3 o más partos)" }
+      ]
+    },
+    duracion: {
+      title: "Duración del parto (contracciones regulares)",
+      options: [
+        { value: 0, label: "Menos de 3 horas" },
+        { value: 1, label: "3-5 horas" },
+        { value: 2, label: "Más de 6 horas" }
+      ]
+    },
+    duracionContr: {
+      title: "Duración de la contracción",
+      options: [
+        { value: 0, label: "Menos de 1 minuto" },
+        { value: 1, label: "1 minuto" },
+        { value: 2, label: "Más de 1 minuto" }
+      ]
+    },
+    intervalo: {
+      title: "Intervalo entre contracciones",
+      options: [
+        { value: 0, label: "Más de 5 minutos" },
+        { value: 1, label: "3-5 minutos" },
+        { value: 2, label: "Menos de 3 minutos" }
+      ]
+    },
+    roturaBolsa: {
+      title: "Rotura de bolsa amniótica",
+      options: [
+        { value: 0, label: "No (membranas íntegras)" },
+        { value: 1, label: "Inmediata (hace menos de 1h)" },
+        { value: 2, label: "Más de 1 hora" }
+      ]
+    }
+  };
+
+  let malinasScores = { paridad: null, duracion: null, duracionContr: null, intervalo: null, roturaBolsa: null };
+
+  function renderMalinasQuestions() {
+    const cont = document.getElementById('malinas-questions');
+    if (!cont) return;
+    let html = '';
+    for (const key in malinasQuestions) {
+      const q = malinasQuestions[key];
+      html += `<div class="malinas-q"><div class="malinas-q-title">${q.title}</div>`;
+      q.options.forEach(opt => {
+        const sel = malinasScores[key] === opt.value ? ' selected' : '';
+        html += `<div class="malinas-opt${sel}" onclick="selectMalinas('${key}', ${opt.value})">
+                    <span class="malinas-opt-label">${opt.label}</span>
+                    <span class="malinas-opt-pts">${opt.value} pts</span>
+                  </div>`;
+      });
+      html += `</div>`;
+    }
+    cont.innerHTML = html;
+    const complete = Object.values(malinasScores).every(v => v !== null);
+    document.getElementById('malinas-calc-btn').disabled = !complete;
+  }
+
+  function selectMalinas(key, value) {
+    malinasScores[key] = value;
+    document.getElementById('malinas-result').innerHTML = '';
+    renderMalinasQuestions();
+  }
+
+  function reiniciarMalinas() {
+    malinasScores = { paridad: null, duracion: null, duracionContr: null, intervalo: null, roturaBolsa: null };
+    document.getElementById('malinas-result').innerHTML = '';
+    renderMalinasQuestions();
+  }
+
+  function calcularMalinas() {
+    const total = Object.values(malinasScores).reduce((a, v) => a + (v || 0), 0);
+    let cls, title, time, action, recs;
+    if (total < 5) {
+      cls = 'verde';
+      title = 'PARTO NO INMINENTE (menos de 5 puntos)';
+      time = 'Se estima que el parto NO se producirá en la siguiente hora.';
+      action = 'TRASLADO POSIBLE';
+      recs = [
+        'Margen de tiempo suficiente para el traslado',
+        'Puede realizarse en vehículo particular o ambulancia convencional',
+        'Realizar aviso al hospital receptor',
+        'Monitorizar la evolución durante el traslado'
+      ];
+    } else if (total <= 7) {
+      cls = 'amarillo';
+      title = 'VALORAR SITUACIÓN (5-7 puntos)';
+      time = 'Situación intermedia: requiere valoración individualizada.';
+      action = 'DECISIÓN INDIVIDUALIZADA';
+      recs = [
+        'Considerar distancia y tiempo estimado de traslado',
+        'Valorar experiencia del profesional disponible',
+        'Si se traslada: preferible ambulancia medicalizada (SVA)',
+        'Realizar aviso urgente al hospital receptor',
+        'Preparar material de asistencia al parto por si es necesario',
+        'Observar presencia de pujos (indicaría parto más inminente)'
+      ];
+    } else {
+      cls = 'rojo';
+      title = 'PARTO INMINENTE (más de 7 puntos o pujos)';
+      time = 'Alta probabilidad de parto en los próximos minutos.';
+      action = 'ATENDER PARTO IN SITU';
+      recs = [
+        'NO intentar trasladar: atender el parto en el lugar',
+        'Contactar inmediatamente con el Centro Coordinador de Emergencias',
+        'Solicitar recurso de Soporte Vital Avanzado (SVA)',
+        'Preparar material de asistencia al parto',
+        'Valorar parto inminente si hay pujos espontáneos, sea cual sea la puntuación',
+        'Organizar el traslado POSTERIOR al nacimiento (madre y RN juntos)'
+      ];
+    }
+
+    const phones = [
+      { t: 'Araba', p: '945 244 444' },
+      { t: 'Bizkaia', p: '944 100 000' },
+      { t: 'Gipuzkoa', p: '943 461 111' }
+    ];
+
+    let html = `<div class="malinas-result ${cls}">
+      <div class="malinas-result-total">Puntuación total: <strong>${total} puntos</strong></div>
+      <div class="malinas-result-title">${title}</div>
+      <div class="malinas-result-time">${time}</div>
+      <div class="malinas-result-action">→ ${action}</div>
+      <ul>${recs.map(r => `<li>${r}</li>`).join('')}</ul>
+      <div class="malinas-phones">
+        ${phones.map(ph => `<a class="malinas-phone-card" href="tel:${ph.p.replace(/\s/g,'')}">
+            <div class="malinas-phone-territorio">${ph.t}</div>
+            <div class="malinas-phone-num">${ph.p}</div>
+          </a>`).join('')}
+      </div>
+    </div>`;
+    document.getElementById('malinas-result').innerHTML = html;
+  }
+
+  renderMalinasQuestions();
+</script>
 
 <!-- ═══════════════ HOME ═══════════════ -->
 <div id="screen-home" class="screen">
