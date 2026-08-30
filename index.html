@@ -105,7 +105,7 @@
   }
   .intro-fig:active { transform: scale(0.95); opacity: 0.8; }
   .intro-fig-label {
-    font-size: 12px; font-weight: bold; font-style: italic;
+    font-size: 15px; font-weight: bold; font-style: italic;
     fill: #ffffff; text-anchor: middle;
   }
   .intro-fig-hint {
@@ -489,7 +489,7 @@
   <div class="intro-title">EMERGENCIAS</div>
   <div class="intro-sub">Toca una figura para continuar</div>
   <div class="intro-svg-wrap">
-    <svg viewBox="0 0 320 250" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 320 460" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="figBody" cx="35%" cy="25%" r="80%">
           <stop offset="0%" stop-color="#ffffff"/>
@@ -510,8 +510,8 @@
         </linearGradient>
       </defs>
 
-      <!-- Adulto (izquierda) -> app actual -->
-      <g class="intro-fig" onclick="goTo('screen-home')" transform="translate(15,0)">
+      <!-- Adulto (arriba, centrado) -> app actual -->
+      <g class="intro-fig" onclick="goTo('screen-home')" transform="translate(100,0)">
         <rect x="6" y="10" width="108" height="215" fill="transparent"/>
         <ellipse cx="60" cy="204" rx="30" ry="7" fill="#000" opacity="0.28"/>
         <g filter="url(#softShadow)">
@@ -525,8 +525,8 @@
         <text x="60" y="232" class="intro-fig-label">ADULTOS</text>
       </g>
 
-      <!-- Niño sentado (centro) -> en construcción -->
-      <g class="intro-fig" onclick="showWip()">
+      <!-- Niño sentado (abajo izquierda) -> en construcción -->
+      <g class="intro-fig" onclick="showWip()" transform="translate(-70,214)">
         <rect x="118" y="120" width="84" height="105" fill="transparent"/>
         <ellipse cx="160" cy="206" rx="28" ry="7" fill="#000" opacity="0.28"/>
         <g filter="url(#softShadow)">
@@ -538,8 +538,8 @@
         <text x="160" y="232" class="intro-fig-label">PEDIATRÍA</text>
       </g>
 
-      <!-- Embarazada de frente (derecha) -> enlace externo -->
-      <g class="intro-fig" onclick="window.open('https://claude.ai/public/artifacts/a903fdc4-6e54-4b90-b1b1-22a81ca38c24','_blank')" transform="translate(-15,0)">
+      <!-- Embarazada de frente (abajo derecha) -> pantalla embebida en la app -->
+      <g class="intro-fig" onclick="goTo('screen-embarazadas')" transform="translate(-30,214)">
         <rect x="206" y="10" width="108" height="215" fill="transparent"/>
         <ellipse cx="260" cy="204" rx="30" ry="7" fill="#000" opacity="0.28"/>
         <g filter="url(#softShadow)">
@@ -554,7 +554,7 @@
           <circle cx="260" cy="61" r="23" fill="url(#hairGrad)"/>
           <circle cx="260" cy="62" r="21" fill="url(#figHead)"/>
         </g>
-        <text x="260" y="232" class="intro-fig-label">MATERNIDAD</text>
+        <text x="260" y="232" class="intro-fig-label">EMBARAZADAS</text>
       </g>
     </svg>
   </div>
@@ -569,6 +569,21 @@
       <div class="wip-text">Esta sección está en construcción.<br>Muy pronto disponible.</div>
     </div>
   </div>
+</div>
+
+<!-- ═══════════════ EMBARAZADAS (contenido embebido) ═══════════════ -->
+<div id="screen-embarazadas" class="screen">
+  <div class="topbar">
+    <button class="back-btn" onclick="goBack()">←</button>
+    Embarazadas
+    <button class="back-btn" onclick="goTo('screen-intro')" style="margin-left:auto;background:#3344ff;border-radius:4px;width:32px;height:32px;font-size:16px;">🏠</button>
+  </div>
+  <div style="text-align:center; padding:4px 0;">
+    <a href="https://claude.ai/public/artifacts/a903fdc4-6e54-4b90-b1b1-22a81ca38c24" target="_blank" style="color:#fff; font-size:11px; opacity:0.7;">¿No carga? Abrir en pestaña nueva ↗</a>
+  </div>
+  <iframe src="https://claude.ai/public/artifacts/a903fdc4-6e54-4b90-b1b1-22a81ca38c24"
+          style="width:100%; height:calc(100vh - 90px); height:calc(100dvh - 90px); border:none; display:block;"
+          loading="lazy"></iframe>
 </div>
 
 <!-- ═══════════════ HOME ═══════════════ -->
