@@ -1495,22 +1495,26 @@
 <script>
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE = 'emergencias-v1';
+    const CACHE = 'emergencias-v2';
     self.addEventListener('install', e => {
       self.skipWaiting();
     });
     self.addEventListener('activate', e => {
+      e.waitUntil(
+        caches.keys().then(keys =>
+          Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+        )
+      );
       self.clients.claim();
     });
     self.addEventListener('fetch', e => {
       e.respondWith(
-        caches.open(CACHE).then(cache =>
-          cache.match(e.request).then(cached =>
-            cached || fetch(e.request).then(resp => {
-              cache.put(e.request, resp.clone());
-              return resp;
-            })
-          )
+        fetch(e.request, { cache: 'no-store' }).then(resp => {
+          const copy = resp.clone();
+          caches.open(CACHE).then(cache => cache.put(e.request, copy));
+          return resp;
+        }).catch(() =>
+          caches.open(CACHE).then(cache => cache.match(e.request))
         )
       );
     });
