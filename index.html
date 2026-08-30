@@ -1520,9 +1520,15 @@ if ('serviceWorker' in navigator) {
       );
     });
   `;
-  const blob = new Blob([swCode], {type: 'application/javascript'});
-  const swUrl = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(swUrl).then(reg => {
+  // Desregistrar cualquier service worker anterior antes de instalar el actual,
+  // para que las actualizaciones se apliquen siempre sin depender del ciclo de vida normal del SW.
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    return Promise.all(regs.map(reg => reg.unregister()));
+  }).then(() => {
+    const blob = new Blob([swCode], {type: 'application/javascript'});
+    const swUrl = URL.createObjectURL(blob);
+    return navigator.serviceWorker.register(swUrl);
+  }).then(() => {
     console.log('SW registered');
   }).catch(err => console.log('SW error:', err));
 }
