@@ -82,6 +82,72 @@
   }
   #screen-home.active { display: flex; }
 
+  /* PORTADA / INTRO SCREEN */
+  #screen-intro {
+    min-height: 100vh;
+    padding: 28px 16px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+  }
+  #screen-intro.active { display: flex; }
+  .intro-title {
+    font-size: 20px; font-weight: 900; font-style: italic;
+    letter-spacing: 0.5px; margin-bottom: 6px;
+  }
+  .intro-sub {
+    font-size: 13px; opacity: 0.85; margin-bottom: 18px;
+  }
+  .intro-svg-wrap { width: 100%; max-width: 340px; }
+  .intro-fig {
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .intro-fig:active { transform: scale(0.95); opacity: 0.8; }
+  .intro-fig-label {
+    font-size: 12px; font-weight: bold; font-style: italic;
+    fill: #ffffff; text-anchor: middle;
+  }
+  .intro-fig-hint {
+    font-size: 9px; fill: #ffffff; opacity: 0.7; text-anchor: middle;
+  }
+
+  /* WIP MODAL (mismo patrón visual que drug-modal) */
+  .wip-modal {
+    display: none;
+    position: fixed; inset: 0;
+    z-index: 200;
+    background: rgba(0,0,100,0.5);
+    align-items: center;
+    justify-content: center;
+    padding: 20px 12px;
+  }
+  .wip-modal.active { display: flex; }
+  .wip-card {
+    background: var(--panel);
+    border: 3px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%; max-width: 340px;
+    position: relative;
+    margin: auto;
+  }
+  .wip-card-close {
+    position: absolute; top: 10px; right: 10px;
+    background: var(--accent); color: white;
+    border: none; border-radius: 4px;
+    width: 32px; height: 32px;
+    font-size: 16px; font-weight: bold;
+    cursor: pointer;
+  }
+  .wip-inner {
+    background: var(--panel-inner);
+    border-radius: 8px;
+    padding: 24px 16px;
+    text-align: center;
+  }
+  .wip-emoji { font-size: 40px; margin-bottom: 10px; }
+  .wip-text { font-size: 15px; font-weight: bold; line-height: 1.5; }
+
   .pas-section { width: 100%; margin-bottom: 30px; }
   .pas-item { margin-bottom: 16px; display: flex; align-items: center; flex-wrap: wrap; }
   .pas-letter {
@@ -416,10 +482,100 @@
 </head>
 <body>
 
-<!-- ═══════════════ HOME ═══════════════ -->
+<!-- ═══════════════ PORTADA ═══════════════ -->
 <div id="app-wrapper">
-<div id="screen-home" class="screen active">
-  <div class="topbar">EMERGENCIAS</div>
+<div id="screen-intro" class="screen active">
+  <div class="intro-title">EMERGENCIAS</div>
+  <div class="intro-sub">Toca una figura para continuar</div>
+  <div class="intro-svg-wrap">
+    <svg viewBox="0 0 320 250" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="figBody" cx="35%" cy="25%" r="80%">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="65%" stop-color="#e4e4e4"/>
+          <stop offset="100%" stop-color="#c2c2c2"/>
+        </radialGradient>
+        <radialGradient id="figHead" cx="35%" cy="30%" r="75%">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="70%" stop-color="#eaeaea"/>
+          <stop offset="100%" stop-color="#cfcfcf"/>
+        </radialGradient>
+        <filter id="softShadow" x="-60%" y="-60%" width="220%" height="220%">
+          <feDropShadow dx="0" dy="2" stdDeviation="2.2" flood-color="#000000" flood-opacity="0.35"/>
+        </filter>
+        <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#6b4a30"/>
+          <stop offset="100%" stop-color="#3c2817"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Adulto (izquierda) -> app actual -->
+      <g class="intro-fig" onclick="goTo('screen-home')" transform="translate(15,0)">
+        <rect x="6" y="10" width="108" height="215" fill="transparent"/>
+        <ellipse cx="60" cy="204" rx="30" ry="7" fill="#000" opacity="0.28"/>
+        <g filter="url(#softShadow)">
+          <rect x="24" y="100" width="12" height="42" rx="6" fill="url(#figBody)" transform="rotate(-8 30 100)"/>
+          <rect x="82" y="98" width="12" height="46" rx="6" fill="url(#figBody)" transform="rotate(-30 88 98)"/>
+          <rect x="38" y="138" width="14" height="52" rx="7" fill="url(#figBody)"/>
+          <rect x="68" y="138" width="14" height="52" rx="7" fill="url(#figBody)"/>
+          <ellipse cx="60" cy="120" rx="26" ry="34" fill="url(#figBody)"/>
+          <circle cx="60" cy="62" r="21" fill="url(#figHead)"/>
+        </g>
+        <text x="60" y="232" class="intro-fig-label">ADULTO</text>
+      </g>
+
+      <!-- Niño sentado (centro) -> en construcción -->
+      <g class="intro-fig" onclick="showWip()">
+        <rect x="118" y="120" width="84" height="105" fill="transparent"/>
+        <ellipse cx="160" cy="206" rx="28" ry="7" fill="#000" opacity="0.28"/>
+        <g filter="url(#softShadow)">
+          <ellipse cx="138" cy="192" rx="9" ry="15" fill="url(#figBody)"/>
+          <ellipse cx="182" cy="192" rx="9" ry="15" fill="url(#figBody)"/>
+          <ellipse cx="160" cy="178" rx="24" ry="22" fill="url(#figBody)"/>
+          <circle cx="160" cy="140" r="16" fill="url(#figHead)"/>
+        </g>
+        <text x="160" y="232" class="intro-fig-label">NIÑO</text>
+      </g>
+
+      <!-- Embarazada de frente (derecha) -> enlace externo -->
+      <g class="intro-fig" onclick="window.open('https://claude.ai/public/artifacts/a903fdc4-6e54-4b90-b1b1-22a81ca38c24','_blank')" transform="translate(-15,0)">
+        <rect x="206" y="10" width="108" height="215" fill="transparent"/>
+        <ellipse cx="260" cy="204" rx="30" ry="7" fill="#000" opacity="0.28"/>
+        <g filter="url(#softShadow)">
+          <rect x="230" y="98" width="12" height="46" rx="6" fill="url(#figBody)" transform="rotate(30 236 98)"/>
+          <rect x="280" y="106" width="12" height="42" rx="6" fill="url(#figBody)" transform="rotate(8 286 106)"/>
+          <rect x="238" y="144" width="14" height="46" rx="7" fill="url(#figBody)"/>
+          <rect x="268" y="144" width="14" height="46" rx="7" fill="url(#figBody)"/>
+          <ellipse cx="260" cy="124" rx="17" ry="26" fill="url(#figBody)"/>
+          <circle cx="258" cy="142" r="27" fill="url(#figBody)"/>
+          <ellipse cx="241" cy="98" rx="9" ry="36" fill="url(#hairGrad)" transform="rotate(-6 241 98)"/>
+          <ellipse cx="279" cy="98" rx="9" ry="36" fill="url(#hairGrad)" transform="rotate(6 279 98)"/>
+          <circle cx="260" cy="61" r="23" fill="url(#hairGrad)"/>
+          <circle cx="260" cy="62" r="21" fill="url(#figHead)"/>
+        </g>
+        <text x="260" y="232" class="intro-fig-label">EMBARAZADA</text>
+      </g>
+    </svg>
+  </div>
+</div>
+
+<!-- ═══════════════ MODAL EN CONSTRUCCIÓN ═══════════════ -->
+<div id="wip-modal" class="wip-modal">
+  <div class="wip-card">
+    <button class="wip-card-close" onclick="closeWip()">X</button>
+    <div class="wip-inner">
+      <div class="wip-emoji">🚧</div>
+      <div class="wip-text">Esta sección está en construcción.<br>Muy pronto disponible.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="screen-home" class="screen">
+  <div class="topbar">
+    <span style="flex:1;">EMERGENCIAS</span>
+    <button class="back-btn" onclick="goTo('screen-intro')" style="margin-left:auto;background:#3344ff;border-radius:4px;width:32px;height:32px;font-size:16px;">🏠</button>
+  </div>
   <div style="padding: 24px 20px 20px;">
     <div class="pas-section">
       <div class="pas-item">
@@ -1318,9 +1474,20 @@
     document.getElementById('drug-modal').classList.remove('active');
   }
 
+  function showWip() {
+    document.getElementById('wip-modal').classList.add('active');
+  }
+
+  function closeWip() {
+    document.getElementById('wip-modal').classList.remove('active');
+  }
+
   // Close modal on background click
   document.getElementById('drug-modal').addEventListener('click', function(e) {
     if (e.target === this) closeDrug();
+  });
+  document.getElementById('wip-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeWip();
   });
 </script>
 
